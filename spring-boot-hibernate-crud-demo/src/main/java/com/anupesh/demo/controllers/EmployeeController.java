@@ -1,7 +1,8 @@
 package com.anupesh.demo.controllers;
 
 import java.util.List;
-import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anupesh.demo.exception.RecordNotFoundException;
-import com.anupesh.demo.model.EmployeeEntity;
+import com.anupesh.demo.model.Employee;
 import com.anupesh.demo.service.EmployeeService;
 
 import io.swagger.annotations.Api;
@@ -39,37 +41,54 @@ public class EmployeeController {
 			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found") })
 
 	@GetMapping
-	public ResponseEntity<List<EmployeeEntity>> getAllEmployees() {
-		List<EmployeeEntity> list = service.getAllEmployees();
+	public ResponseEntity<List<Employee>> getAllEmployees() {
+		List<Employee> list = service.getAllEmployees();
 
-		return new ResponseEntity<List<EmployeeEntity>>(list, new HttpHeaders(), HttpStatus.OK);
+		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/groupby")
+	public ResponseEntity<List<Employee>> getAllEmployeesByUsingGroupBy() {
+		List<Employee> list = service.countEmployeeWithGroupBy();
+
+		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/paging")
+	public ResponseEntity<List<Employee>> getAllEmployeesByPaging(
+			@RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy) {
+		List<Employee> list = service.getAllEmployeesWithPagination(pageNo, pageSize, sortBy);
+
+		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Search a employee with an ID", response = EmployeeEntity.class)
+	@ApiOperation(value = "Search a employee with an ID", response = Employee.class)
 	@GetMapping("/{id}")
-	public ResponseEntity<EmployeeEntity> getEmployeeById(@PathVariable("id") Long id) throws RecordNotFoundException {
-		EmployeeEntity entity = service.getEmployeeById(id);
-		return new ResponseEntity<EmployeeEntity>(entity, new HttpHeaders(), HttpStatus.OK);
+	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) throws RecordNotFoundException {
+		Employee entity = service.getEmployeeById(id);
+		return new ResponseEntity<Employee>(entity, new HttpHeaders(), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Add a employee")
 	@PostMapping
-	public ResponseEntity<EmployeeEntity> createEmployee(@RequestBody EmployeeEntity employee)
+	public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee)
 			throws RecordNotFoundException {
-		EmployeeEntity updated = service.createOrUpdateEmployee(employee);
-		return new ResponseEntity<EmployeeEntity>(updated, new HttpHeaders(), HttpStatus.OK);
+		Employee updated = service.createOrUpdateEmployee(employee);
+		return new ResponseEntity<Employee>(updated, new HttpHeaders(), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Update a employee")
 	@PutMapping("/{id}")
-	public ResponseEntity<EmployeeEntity> updateEmployee(@PathVariable("id") Long id,
-			@RequestBody EmployeeEntity entity) throws RecordNotFoundException {
-		EmployeeEntity saveEntity = service.getEmployeeById(id);
+	public ResponseEntity<Employee> updateEmployee(@PathVariable("id") Long id,
+			@RequestBody Employee entity) throws RecordNotFoundException {
+		Employee saveEntity = service.getEmployeeById(id);
 		saveEntity.setEmail(entity.getEmail());
 		saveEntity.setEmployeeName(entity.getEmployeeName());
 		saveEntity.setNickName(entity.getNickName());
-		EmployeeEntity updated = service.createOrUpdateEmployee(saveEntity);
-		return new ResponseEntity<EmployeeEntity>(updated, new HttpHeaders(), HttpStatus.OK);
+		Employee updated = service.createOrUpdateEmployee(saveEntity);
+		return new ResponseEntity<Employee>(updated, new HttpHeaders(), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Delete a employee")
@@ -77,6 +96,13 @@ public class EmployeeController {
 	public HttpStatus deleteEmployeeById(@PathVariable("id") String id) throws RecordNotFoundException {
 		service.deleteEmployeeById(Long.parseLong(id));
 		return HttpStatus.FORBIDDEN;
+	}
+	
+	@ApiOperation(value = "Search a employee with an ID", response = Employee.class)
+	@GetMapping("/count")
+	public ResponseEntity<String> getEmployeeCount() throws RecordNotFoundException {
+		
+		return ResponseEntity.status(HttpStatus.OK).body("Total count " + service.countEmployee());
 	}
 
 }

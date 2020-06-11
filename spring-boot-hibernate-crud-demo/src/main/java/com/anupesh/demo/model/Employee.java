@@ -6,12 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name="EMPLOYEE")
-public class EmployeeEntity {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +21,7 @@ public class EmployeeEntity {
     private Long id;
     
     @ApiModelProperty(notes = "The employee name")
+    @NotEmpty(message = "employeeName must not be empty")
     @Column(name="employee_name")
     private String employeeName;
     
@@ -27,6 +30,8 @@ public class EmployeeEntity {
     private String nickName;
    
     @ApiModelProperty(notes = "The employee email")
+    @Email(message = "email should be a valid email")
+    @NotEmpty(message = "email must not be empty")
     @Column(name="email", nullable=false, length=200)
     private String email;
     

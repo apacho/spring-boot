@@ -11,7 +11,7 @@ public class DemoApplication {
 	private static final Logger LOGGER=LoggerFactory.getLogger(DemoApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		LOGGER.debug("Simple log statement with inputs {}, {} and {}", 1,2,3);
+		LOGGER.info("Simple log statement with inputs {}, {} and {}", 1,2,3);
 	}
 
 }

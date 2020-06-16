@@ -24,8 +24,7 @@ public class EmployeeService {
      
     @Autowired
     EmployeeRepository repository;
-    
-    
+
     public List<Employee> getAllEmployees()
     {
         List<Employee> employeeList = repository.findAll();

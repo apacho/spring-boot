@@ -51,7 +51,7 @@ public class EmployeeController {
 	@GetMapping
 	public ResponseEntity<List<Employee>> getAllEmployees() {
 		List<Employee> list = service.getAllEmployees();
-		logger.debug("getAllEmployees");
+		logger.info("getAllEmployees");
 		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
 	}
 	
@@ -63,7 +63,7 @@ public class EmployeeController {
 	@GetMapping("/groupby")
 	public ResponseEntity<List<Employee>> getAllEmployeesByUsingGroupBy(@RequestParam("groupby") String groupby) {
 		List<Employee> list = service.countEmployeeWithGroupBy(groupby);
-		logger.debug("getAllEmployees using groupby");
+		logger.info("getAllEmployees using groupby");
 		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
 	}
 	
@@ -82,7 +82,7 @@ public class EmployeeController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) throws RecordNotFoundException {
 		Employee entity = service.getEmployeeById(id);
-		logger.debug("Search a employee with an ID");
+		logger.info("Search a employee with an ID");
 		return new ResponseEntity<Employee>(entity, new HttpHeaders(), HttpStatus.OK);
 	}
 

@@ -15,11 +15,16 @@ import com.anupesh.demo.exception.RecordNotFoundException;
 import com.anupesh.demo.model.Employee;
 import com.anupesh.demo.repository.EmployeeRepository;
  
+/**
+ * @author anupesh.p
+ *
+ */
 @Service
 public class EmployeeService {
      
     @Autowired
     EmployeeRepository repository;
+    
     
     public List<Employee> getAllEmployees()
     {
@@ -66,8 +71,9 @@ public class EmployeeService {
     	return repository.countUsers();
     }
     
-    public List<Employee> countEmployeeWithGroupBy() {
-    	return (List<Employee>) repository.findEmpCount();
+    
+    public List<Employee> countEmployeeWithGroupBy(String names) {
+    	return (List<Employee>) repository.findEmpCount(names);
     }
     
     public List<Employee> getAllEmployeesWithPagination(Integer pageNo, Integer pageSize, String sortBy)
@@ -82,5 +88,6 @@ public class EmployeeService {
             return new ArrayList<Employee>();
         }
     }
+    
     
 }

@@ -1,0 +1,7 @@
+com.anupesh.demo
+com.anupesh.demo.config
+com.anupesh.demo.controllers
+com.anupesh.demo.exception
+com.anupesh.demo.model
+com.anupesh.demo.repository
+com.anupesh.demo.service

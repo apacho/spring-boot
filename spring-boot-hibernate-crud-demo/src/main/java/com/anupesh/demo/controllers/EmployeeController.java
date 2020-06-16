@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.anupesh.demo.DemoApplication;
 import com.anupesh.demo.exception.RecordNotFoundException;
 import com.anupesh.demo.model.Employee;
 import com.anupesh.demo.service.EmployeeService;
@@ -27,12 +30,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+/**
+ * @author anupesh.p
+ *
+ */
 @RestController
 @Api(value = "EmployeeController", description = "REST Apis related to Employee Entity!!!!")
 @RequestMapping("/employees")
 public class EmployeeController {
 	@Autowired
 	EmployeeService service;
+	private static final Logger logger=LoggerFactory.getLogger(EmployeeController.class);
 
 	@ApiOperation(value = "View a list of available employees", response = Iterable.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -43,14 +51,19 @@ public class EmployeeController {
 	@GetMapping
 	public ResponseEntity<List<Employee>> getAllEmployees() {
 		List<Employee> list = service.getAllEmployees();
-
+		logger.debug("getAllEmployees");
 		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/groupby")
-	public ResponseEntity<List<Employee>> getAllEmployeesByUsingGroupBy() {
-		List<Employee> list = service.countEmployeeWithGroupBy();
 
+	/**
+	 * @param groupby
+	 * @return
+	 */
+	@GetMapping("/groupby")
+	public ResponseEntity<List<Employee>> getAllEmployeesByUsingGroupBy(@PathVariable("groupby") String groupby) {
+		List<Employee> list = service.countEmployeeWithGroupBy(groupby);
+		logger.debug("getAllEmployees using groupby");
 		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
 	}
 	
@@ -64,10 +77,12 @@ public class EmployeeController {
 		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);
 	}
 
+
 	@ApiOperation(value = "Search a employee with an ID", response = Employee.class)
-	@GetMapping("/{id}")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) throws RecordNotFoundException {
 		Employee entity = service.getEmployeeById(id);
+		logger.debug("Search a employee with an ID");
 		return new ResponseEntity<Employee>(entity, new HttpHeaders(), HttpStatus.OK);
 	}
 
@@ -97,6 +112,7 @@ public class EmployeeController {
 		service.deleteEmployeeById(Long.parseLong(id));
 		return HttpStatus.FORBIDDEN;
 	}
+	
 	
 	@ApiOperation(value = "Search a employee with an ID", response = Employee.class)
 	@GetMapping("/count")

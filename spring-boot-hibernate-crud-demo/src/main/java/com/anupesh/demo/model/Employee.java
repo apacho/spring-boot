@@ -73,6 +73,17 @@ public class Employee {
 		return "EmployeeEntity [id=" + id + ", employeeName=" + employeeName + ", nickName=" + nickName + ", email="
 				+ email + "]";
 	}
+
+	public Employee(Long id, @NotEmpty(message = "employeeName must not be empty") String employeeName, String nickName,
+			@Email(message = "email should be a valid email") @NotEmpty(message = "email must not be empty") String email) {
+		super();
+		this.id = id;
+		this.employeeName = employeeName;
+		this.nickName = nickName;
+		this.email = email;
+	}
+	
+	
 	
 	
 

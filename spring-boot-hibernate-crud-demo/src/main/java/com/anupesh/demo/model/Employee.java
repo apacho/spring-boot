@@ -2,6 +2,7 @@ package com.anupesh.demo.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,11 +10,16 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.anupesh.demo.audit.Auditable;
+
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name="EMPLOYEE")
-public class Employee {
+@EntityListeners(AuditingEntityListener.class)
+public class Employee extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

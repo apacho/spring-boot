@@ -82,6 +82,10 @@ public class Employee {
 		this.nickName = nickName;
 		this.email = email;
 	}
+
+	public Employee() {
+		super();
+	}
 	
 	
 	

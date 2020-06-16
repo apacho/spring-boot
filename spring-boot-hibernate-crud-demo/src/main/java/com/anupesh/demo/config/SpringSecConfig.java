@@ -22,27 +22,34 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter {
 			"/webjars/**" //
 	};
 
+	/*
+	 * @Override protected void configure(HttpSecurity httpSecurity) throws
+	 * Exception { httpSecurity.authorizeRequests().antMatchers("/",
+	 * "/swagger-resources").permitAll(); httpSecurity.csrf().disable();
+	 * httpSecurity.headers().frameOptions().disable(); }
+	 */
+
 	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.authorizeRequests().antMatchers("/", "/swagger-resources").permitAll();
-		httpSecurity.csrf().disable();
-		httpSecurity.headers().frameOptions().disable();
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception { 
+		auth.inMemoryAuthentication().withUser("user").password("{noop}password").roles("USER").and().withUser("admin")
+				.password("{noop}admin").roles("USER", "ADMIN");
 	}
 
 	/*
-	 * @Override protected void configure(AuthenticationManagerBuilder auth) throws
-	 * Exception { //DB
-	 * auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().
-	 * encode("password")).roles("USER").and().withUser("admin")
-	 * .password(passwordEncoder().encode("admin")).roles("USER", "ADMIN");
-	 * System.out.println(passwordEncoder().encode("password")); }
-	 * 
 	 * @Override protected void configure(HttpSecurity http) throws Exception {
 	 * http.authorizeRequests().antMatchers(AUTH_LIST).authenticated().and().
 	 * httpBasic(); }
-	 * 
-	 * @Bean public PasswordEncoder passwordEncoder() { return new
-	 * BCryptPasswordEncoder(); }
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
+	}
+
+	/*
+	 * @Autowired public void configureGlobal(AuthenticationManagerBuilder auth)
+	 * throws Exception {
+	 * auth.inMemoryAuthentication().withUser("admin").password("{noop}password").
+	 * roles("USER"); }
 	 */
 
 }

@@ -61,7 +61,7 @@ public class EmployeeController {
 	 * @return
 	 */
 	@GetMapping("/groupby")
-	public ResponseEntity<List<Employee>> getAllEmployeesByUsingGroupBy(@PathVariable("groupby") String groupby) {
+	public ResponseEntity<List<Employee>> getAllEmployeesByUsingGroupBy(@RequestParam("groupby") String groupby) {
 		List<Employee> list = service.countEmployeeWithGroupBy(groupby);
 		logger.debug("getAllEmployees using groupby");
 		return new ResponseEntity<List<Employee>>(list, new HttpHeaders(), HttpStatus.OK);

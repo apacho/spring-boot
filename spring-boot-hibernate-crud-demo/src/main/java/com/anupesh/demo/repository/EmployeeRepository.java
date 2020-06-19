@@ -17,4 +17,5 @@ public interface EmployeeRepository
 	 
 	 @Query("select new map(count(v) as cnt, v.email) from Employee v group by :names")
 	 public List<?> findEmpCount(@Param("names") String names);
+	 
 }

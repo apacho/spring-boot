@@ -25,14 +25,14 @@ import com.anupesh.registation.service.CourseService;
 import com.anupesh.registation.service.StudentService;
 
 @RestController
-public class StudentCourseRegistrationController {
-	private final static Logger LOG = LoggerFactory.getLogger(StudentCourseRegistrationController.class);
+public class StudentCourseController {
+	private final static Logger LOG = LoggerFactory.getLogger(StudentCourseController.class);
 
 	private StudentService studentService;
 	private CourseService courseService;
 
 	@Autowired
-	public StudentCourseRegistrationController(StudentService studentService, CourseService courseService) {
+	public StudentCourseController(StudentService studentService, CourseService courseService) {
 		this.studentService = studentService;
 		this.courseService = courseService;
 	}

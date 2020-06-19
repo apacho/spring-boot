@@ -68,8 +68,8 @@ public class StudentService {
 		if (!course.isPresent()) {
 			throw new StudentCourseIllegalStateException("Failed to get Students. Invalid courseName :: " + courseName);
 		}
-		Comparator<Student> studentByName = (Student student1, Student student2) -> student1.getStudentName()
-				.compareTo(student2.getStudentName());
+		Comparator<Student> studentByName = (Student student1, Student student2) -> student1.getMobileNumber()
+				.compareTo(student2.getMobileNumber());
 		TreeSet<Student> sortedStudents = new TreeSet<>(studentByName);
 
 		Hibernate.initialize(course.get().getStudents());
@@ -82,7 +82,7 @@ public class StudentService {
 	
 	@Transactional
 	public Set<Course> getCoursesByStudentId(Long studentId) {
-		Optional<Student> studentOptional = studentRepository.findById(studentId);
+		Optional<Student> studentOptional = studentRepository.findByMobileNumber(String.valueOf(studentId));
 		
 		if (!studentOptional.isPresent()) {
 			throw new StudentCourseIllegalStateException("Failed to get student. Invalid studentId :: " + studentId);
@@ -91,11 +91,11 @@ public class StudentService {
 		Comparator<Course> courseByName = (Course course1, Course course2) -> course1.getCourseName()
 				.compareTo(course2.getCourseName());
 		TreeSet<Course> sortedCourses = new TreeSet<>(courseByName);
-
 		Set<Course> courses = studentOptional.get().getCourses();
 		//courses.forEach(course -> course.setStudents(null));
 		sortedCourses.addAll(courses);
-		LOG.debug("Actual Students :: {} and Sorted Students by Name:: {}", courses, sortedCourses);
+		LOG.info("Actual Students :: {} and Sorted Students by Name:: {}", courses, sortedCourses);
+		Hibernate.initialize(studentOptional.get().getCourses());
 		return sortedCourses;
 	}
 	

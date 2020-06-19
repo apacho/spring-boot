@@ -1,6 +1,7 @@
 package com.anupesh.registation.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,9 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -47,20 +48,14 @@ public class Student implements Serializable {
 	@Column(name = "COMPLETED")
 	private Boolean completed;
 
-	//@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Course> courses;
+	//@ManyToMany(fetch = FetchType.LAZY, mappedBy = "students", cascade=CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinTable(name = "student_course", joinColumns = {
+			@JoinColumn(name = "COURSE_ID", nullable = false, updatable = false) }, 
+	inverseJoinColumns = {
+			@JoinColumn(name = "STUDENT_ID", nullable = false, updatable = false) })
+	private Set<Course> courses = new HashSet<Course>();
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((mobileNumber == null) ? 0 : mobileNumber.hashCode());
-		result = prime * result + ((studentId == null) ? 0 : studentId.hashCode());
-		result = prime * result + ((studentName == null) ? 0 : studentName.hashCode());
-		return result;
-	}
 
 	@Override
 	public String toString() {

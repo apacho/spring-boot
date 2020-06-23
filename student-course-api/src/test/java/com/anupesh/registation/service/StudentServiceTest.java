@@ -109,8 +109,9 @@ public class StudentServiceTest {
 	public void testGetStudentsByCourseNameWithEmptyCourse() {
 		String courseName = "DevOps";
 		Mockito.when(courseServiceMock.getCourseByCourseName(Mockito.anyString())).thenReturn(Optional.empty());
-		Set<Student> students = studentService.getStudentsByCourseName(courseName);
-		Assert.assertNotNull(students);
+		  Set<Student> students = studentService.getStudentsByCourseName(courseName);
+		  Assert.assertNotNull(students);
+		 
 	}
 
 }

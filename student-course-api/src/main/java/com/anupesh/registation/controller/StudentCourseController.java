@@ -1,5 +1,6 @@
 package com.anupesh.registation.controller;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -39,8 +40,10 @@ public class StudentCourseController {
 
 	@PostMapping("/student")
 	public ResponseEntity<Student> addStudent(@Valid @RequestBody Student student) throws RecordNotFoundException {
-		Student updated = studentService.addStudent(student).get();
-		return new ResponseEntity<Student>(updated, new HttpHeaders(), HttpStatus.OK);
+		// Optional<Student> updated = studentService.addStudent(student);
+
+		Optional<Student> updated = Optional.of(studentService.addStudent(student).get());
+		return new ResponseEntity<Student>(updated.get(), new HttpHeaders(), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/student/{studentId}")
@@ -70,7 +73,7 @@ public class StudentCourseController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body("Students has been successfully Enrolled to Course :: " + courseId);
 	}
-	
+
 	@PutMapping("/AssignCoursesToStudents/{courseId}")
 	public ResponseEntity<String> enrollCourseToStudents(@PathVariable Long courseId,
 			@RequestBody Set<Student> students) {
@@ -84,7 +87,7 @@ public class StudentCourseController {
 		return new ResponseEntity<Set<Student>>(studentService.getStudentsByCourseName(courseName), new HttpHeaders(),
 				HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/coursesByStudentName/{studentId}")
 	public ResponseEntity<Set<Course>> getCoursesByStudentId(@PathVariable Long studentId) {
 		return new ResponseEntity<Set<Course>>(studentService.getCoursesByStudentId(studentId), new HttpHeaders(),

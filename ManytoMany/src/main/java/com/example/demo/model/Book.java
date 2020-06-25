@@ -29,14 +29,14 @@ public class Book implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int bookId;
+	private int bookId2;
 
 	@Column(name = "name")
 	private String name;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinTable(name = "book_publisher", joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "bookId"), 
+	@JoinTable(name = "book_publisher", joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "bookId2"), 
 	inverseJoinColumns = @JoinColumn(name = "publisher_id", referencedColumnName = "publisherId"))
 	private Set<Publisher> publishers;
 
